@@ -3,14 +3,14 @@ kind: Service
 metadata:
   name: my-webpage
   labels:
-	app: my-webpage
+    app: my-webpage
 spec:
   ports:
-	- nodePort: 30000
-  	port: 80
-  	targetPort: 80
+    - nodePort: 30000
+      port: 80
+      targetPort: 80
   selector:
-	app: my-webpage
+    app: my-webpage
   type: LoadBalancer
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
@@ -18,18 +18,22 @@ kind: Deployment
 metadata:
   name: my-webpage
   labels:
-	app: my-webpage
+    app: my-webpage
 spec:
   replicas: 2
   selector:
-	matchLabels:
-  	app: my-webpage
+    matchLabels:
+      app: my-webpage
   strategy:
-	type: RollingUpdate
+    type: RollingUpdate
   template:
-	metadata:
-  	labels:
-    	app: my-webpage
-	spec:
-  	containers:
-  	- image: devwrat/my_httpd_php_ipmem_liveclock
+      metadata:
+        labels:
+          app: my-webpage
+      spec:
+        containers:
+          - image: devwrat/my_httpd_php_ipmem_liveclock
+            name: my-webpage
+            ports:
+              - containerPort: 80
+                name: my-webpage
